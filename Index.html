@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Arc Games - Game Hub</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      /* Circuitry background using SVG data URI */
+      background: #181c22 url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="none"/><g stroke="%233c78c8" stroke-width="1.2" opacity="0.18"><path d="M10 0v40h20v20h20v40"/><path d="M90 0v40h-20v20h-20v40"/><circle cx="10" cy="40" r="2.5"/><circle cx="30" cy="60" r="2.5"/><circle cx="50" cy="80" r="2.5"/><circle cx="90" cy="40" r="2.5"/><circle cx="70" cy="60" r="2.5"/><circle cx="50" cy="80" r="2.5"/></g></svg>') repeat;
+      background-size: 220px 220px;
+    }
+    header {
+      background: #222;
+      padding: 24px 0 12px 0;
+      text-align: center;
+      box-shadow: 0 2px 12px #0006;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2.5em;
+      letter-spacing: 2px;
+      color: #ffe066;
+      text-shadow: 2px 2px 8px #000;
+    }
+    .intro-card {
+      background: rgba(40,40,40,0.97);
+      border: 2px solid #bdb76b;
+      border-radius: 16px;
+      max-width: 700px;
+      margin: 32px auto 0 auto;
+      box-shadow: 0 4px 24px #000a;
+      padding: 32px 28px 24px 28px;
+      text-align: center;
+    }
+    .intro-card img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 2px solid #ffe066;
+      box-shadow: 0 2px 12px #0007;
+      margin-bottom: 18px;
+      background: #222;
+    }
+    .intro-title {
+      font-size: 1.7em;
+      color: #ffe066;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 6px #000a;
+    }
+    .intro-desc {
+      color: #eee;
+      font-size: 1.13em;
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+    .company-card {
+      background: rgba(30,30,30,0.96);
+      border: 2px solid #3c78c8;
+      border-radius: 14px;
+      max-width: 540px;
+      margin: 32px auto 0 auto;
+      box-shadow: 0 2px 16px #0007;
+      padding: 26px 22px 18px 22px;
+      text-align: center;
+    }
+    .company-card img {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      border-radius: 12px;
+      border: 2px solid #3c78c8;
+      box-shadow: 0 2px 12px #0007;
+      margin-bottom: 14px;
+      background: #111;
+    }
+    .company-title {
+      font-size: 1.3em;
+      color: #3c78c8;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 6px #000a;
+    }
+    .company-desc {
+      color: #dbeafe;
+      font-size: 1.05em;
+      line-height: 1.5;
+    }
+    .games-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 32px;
+      padding: 40px 0;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .game-card {
+      background: rgba(40,40,40,0.95);
+      border: 2px solid #bdb76b;
+      border-radius: 14px;
+      width: 260px;
+      box-shadow: 0 4px 24px #000a;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.18s, border-color 0.18s;
+      cursor: pointer;
+      position: relative;
+    }
+    .game-card.selected {
+      border-color: #ffe066;
+      box-shadow: 0 0 0 4px #ffe06655, 0 4px 24px #000a;
+      transform: scale(1.04);
+    }
+    .game-thumb {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      background: #222;
+      border-bottom: 1px solid #bdb76b;
+    }
+    .game-title {
+      font-size: 1.3em;
+      color: #ffe066;
+      margin: 18px 0 6px 0;
+      text-align: center;
+    }
+    .game-desc {
+      color: #eee;
+      font-size: 1em;
+      padding: 0 16px 12px 16px;
+      text-align: center;
+      min-height: 48px;
+    }
+    .play-btn {
+      background: #3c78c8;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 32px;
+      font-size: 1.1em;
+      font-weight: bold;
+      margin-bottom: 18px;
+      margin-top: 8px;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+      display: none;
+    }
+    .game-card.selected .play-btn {
+      display: block;
+    }
+    .footer {
+      text-align: center;
+      color: #bbb;
+      font-size: 0.95em;
+      padding: 18px 0 10px 0;
+      margin-top: 30px;
+    }
+    @media (max-width: 600px) {
+      .games-list { flex-direction: column; align-items: center; }
+      .game-card { width: 90vw; }
+      .intro-card, .company-card { max-width: 98vw; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Arc Games</h1>
+    <div style="color:#ffe066; font-size:1.1em; margin-top:8px;">Browse &amp; Play Your Games</div>
+  </header>
+  <main>
+    <div class="intro-card">
+      <img src="GameImages/ArcGamesLogo.jpg" alt="Arcadia RPG Main Art">
+      <div class="intro-title">Welcome to Online Arcadia</div>
+      <div class="intro-desc">
+        Online Arcadia is your personal portal to a growing collection of indie games. 
+        Dive into adventures, puzzles, and more—each crafted with care and creativity. 
+        Select a game below to begin your journey!
+      </div>
+    </div>
+    <div class="games-list" id="games-list">
+      <!-- Game cards will be injected here -->
+    </div>
+    <div class="company-card">
+      <img src="GameImages/ArcGamesLogo.jpg" alt="ArcGames Logo">
+      <div class="company-title">About ArcGames</div>
+      <div class="company-desc">
+        <strong>ArcGames.INC</strong> is a small, passionate team dedicated to building unique, fun, and accessible games for everyone. 
+        We believe in creativity, community, and the joy of play. 
+        Thank you for supporting indie development and being part of our adventure!
+      </div>
+    </div>
+  </main>
+  <div class="footer">
+    &copy; 2025 Online Arcadia &mdash; Your personal game hub
+  </div>
+  <script>
+    // Only Arcadia for now
+    const games = [
+      {
+        title: "Arcadia RPG",
+        desc: "A classic RPG adventure. Choose your class and explore the world.",
+        url: "Arcadia.html",
+        thumb: "GameImages/MainBackground.jpg"
+      }
+    ];
+
+    const gamesList = document.getElementById('games-list');
+    let selectedCard = null;
+
+    games.forEach((game, idx) => {
+      const card = document.createElement('div');
+      card.className = 'game-card';
+      card.tabIndex = 0;
+      card.innerHTML = `
+        <img class="game-thumb" src="${game.thumb}" alt="${game.title}">
+        <div class="game-title">${game.title}</div>
+        <div class="game-desc">${game.desc}</div>
+        <a href="${game.url}">
+          <button class="play-btn">Play</button>
+        </a>
+      `;
+      card.addEventListener('click', () => {
+        if (selectedCard) selectedCard.classList.remove('selected');
+        card.classList.add('selected');
+        selectedCard = card;
+      });
+      card.addEventListener('keydown', (e) => {
+        if (e.key === "Enter" || e.key === " ") card.click();
+      });
+      gamesList.appendChild(card);
+      // Auto-select the first game
+      if (idx === 0) {
+        setTimeout(() => card.click(), 10);
+      }
+    });
+  </script>
+</body>
+</html>
